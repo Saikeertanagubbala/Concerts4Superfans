@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install requests jinja2 python-dotenv
+        run: pip install requests jinja2 python-dotenv pandas
 
       - name: Run pipeline
         env:
