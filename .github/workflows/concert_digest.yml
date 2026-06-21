@@ -26,4 +26,4 @@ jobs:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
           GMAIL_ACCOUNT: ${{ secrets.GMAIL_ACCOUNT }}
-        run: python concert_superfan_pipeline.py
+        run: python consolidated_python_script.py
