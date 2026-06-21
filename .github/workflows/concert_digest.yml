@@ -1,0 +1,29 @@
+name: Weekly Concert Digest
+
+on:
+  schedule:
+    - cron: '0 13 * * 0'  # Every Sunday at 9am EST
+  workflow_dispatch:        # Allows manual trigger from GitHub UI
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests jinja2 python-dotenv
+
+      - name: Run pipeline
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          GMAIL_ACCOUNT: ${{ secrets.GMAIL_ACCOUNT }}
+        run: python concert_superfan_pipeline.py
