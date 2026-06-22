@@ -27,5 +27,5 @@ jobs:
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
           GMAIL_ACCOUNT: ${{ secrets.GMAIL_ACCOUNT }}
         run: |
-        - cd pipeline_demo
-        - python consolidated_python_script.py
+         cd pipeline_demo
+         python consolidated_python_script.py
