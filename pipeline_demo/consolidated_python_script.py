@@ -49,7 +49,7 @@ def get_event_details(query):
 
 
 # Load top 50 artists from dummy data CSV
-top_50 = pd.read_csv("./pipeline_demo/billboard_top_artists_sample_data.csv")
+top_50 = pd.read_csv("billboard_top_artists_sample_data.csv")
 list_of_artists = top_50["artist_name"].tolist()
 
 # Query Ticketmaster for each artist
@@ -62,7 +62,7 @@ for artist in list_of_artists:
 touring_artists = sorted(touring_artists, key=lambda x: x["concert_date"])
 
 # Render HTML email template
-env = Environment(loader=FileSystemLoader("./pipeline_demo"))
+env = Environment(loader=FileSystemLoader("."))
 template = env.get_template('email_template.html')
 html_output = template.render(events=touring_artists, date=date.today().strftime("%B %d, %Y"))
 
