@@ -26,4 +26,6 @@ jobs:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
           GMAIL_ACCOUNT: ${{ secrets.GMAIL_ACCOUNT }}
-        run: python consolidated_python_script.py
+        run: |
+        - cd pipeline_demo
+        - python consolidated_python_script.py
