@@ -1,0 +1,54 @@
+name: Spotify Data Refresh Reminder
+
+on:
+  schedule:
+    - cron: '0 13 1 1,7 *'  # Every January 1st and July 1st at 9am EST
+  workflow_dispatch:          # Allows manual trigger from GitHub UI
+
+jobs:
+  send-reminder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send reminder email
+        env:
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          GMAIL_ACCOUNT: ${{ secrets.GMAIL_ACCOUNT }}
+        run: |
+          python - <<EOF
+          import smtplib
+          from email.mime.multipart import MIMEMultipart
+          from email.mime.text import MIMEText
+          import os
+
+          sender = os.getenv('GMAIL_ACCOUNT')
+          receiver = os.getenv('GMAIL_ACCOUNT')
+          app_password = os.getenv('APP_PASSWORD')
+
+          body = """
+          Hi,
+
+          It's time to refresh your Spotify extended streaming history.
+
+          To download your data:
+          1. Go to https://www.spotify.com/account/privacy/
+          2. Scroll to "Download your data"
+          3. Request your Extended Streaming History
+          4. Spotify will email you a download link within 30 days
+          5. Once received, update your local data and rerun the pipeline
+
+          — Concert Superfan
+          """
+
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = "Time to refresh your Spotify data"
+          msg["From"] = sender
+          msg["To"] = receiver
+          msg.attach(MIMEText(body, "plain"))
+
+          with smtplib.SMTP("smtp.gmail.com", 587) as server:
+              server.starttls()
+              server.login(sender, app_password)
+              server.sendmail(sender, receiver, msg.as_string())
+              print("Reminder sent!")
+          EOF
