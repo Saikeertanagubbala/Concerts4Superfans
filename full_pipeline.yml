@@ -1,0 +1,35 @@
+name: Full Concert Superfan Pipeline
+
+on:
+  schedule:
+    - cron: '0 13 * * 0'  # Every Sunday at 9am EST
+  workflow_dispatch:        # Allows manual trigger from GitHub UI
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests jinja2 python-dotenv pandas duckdb numpy scikit-learn spotipy
+
+      - name: Write Spotify token cache
+        run: echo '${{ secrets.SPOTIFY_TOKEN_CACHE }}' > .cache
+
+      - name: Run full pipeline
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          GMAIL_ACCOUNT: ${{ secrets.GMAIL_ACCOUNT }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        run: |
+          python full_script.py
