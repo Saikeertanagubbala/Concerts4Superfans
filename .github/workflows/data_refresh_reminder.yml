@@ -37,7 +37,7 @@ jobs:
           4. Spotify will email you a download link within 30 days
           5. Once received, update your local data and rerun the pipeline
 
-          — Concert Superfan
+          Thank you!
           """
 
           msg = MIMEMultipart("alternative")
